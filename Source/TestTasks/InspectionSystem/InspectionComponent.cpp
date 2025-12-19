@@ -38,15 +38,6 @@ void UInspectionComponent::BeginPlay()
 	
 }
 
-// Called every frame
-void UInspectionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
-
 // ============================================================================
 // Input setup
 // ============================================================================
@@ -69,8 +60,9 @@ void UInspectionComponent::StartInspection(AActor* InspectedActor)
 	OriginalPosition =  InspectedActor->GetActorLocation();
 	OriginalRotation = InspectedActor->GetActorRotation();
 	OriginalScale = InspectedActor->GetActorScale();
-	UStaticMeshComponent* StaticMesh = Cast<UStaticMeshComponent>(InspectedActor->GetComponentByClass(UStaticMeshComponent::StaticClass()));
+	TObjectPtr<UStaticMeshComponent> StaticMesh = Cast<UStaticMeshComponent>(InspectedActor->GetComponentByClass(UStaticMeshComponent::StaticClass()));
 	StaticMesh->SetSimulatePhysics(false);
+	StaticMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
 	CurrentInspectedActor = InspectedActor;
 	CurrentInspectedActor->AttachToComponent(InspectionPivot, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
@@ -83,8 +75,9 @@ void UInspectionComponent::StopInspection()
 	OnInspectionStateChanged.Broadcast(false);
 	
 	CurrentInspectedActor->GetRootComponent()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-	UStaticMeshComponent* StaticMesh = Cast<UStaticMeshComponent>(CurrentInspectedActor->GetComponentByClass(UStaticMeshComponent::StaticClass()));
+	TObjectPtr<UStaticMeshComponent> StaticMesh = Cast<UStaticMeshComponent>(CurrentInspectedActor->GetComponentByClass(UStaticMeshComponent::StaticClass()));
 	StaticMesh->SetSimulatePhysics(true);
+	StaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CurrentInspectedActor->SetActorLocation(OriginalPosition);
 	CurrentInspectedActor->SetActorRotation(OriginalRotation);
 	CurrentInspectedActor->SetActorScale3D(OriginalScale);
@@ -109,12 +102,13 @@ void UInspectionComponent::StopHoldingInspection(const FInputActionValue& Value)
 
 void UInspectionComponent::Rotate(const FInputActionValue& Value)
 {
-	if(!bIsHolding) return;
-    
+	if(!bIsHolding || !CameraComponent)
+	{
+		return;
+	}
+	
 	FVector2D RotationInput = Value.Get<FVector2D>();
 	float DeltaTime = GetWorld()->GetDeltaSeconds();
-	
-	if(!CameraComponent) return;
 	
 	FVector CameraUp = CameraComponent->GetUpVector();
 	CurrentInspectedActor->AddActorWorldRotation(
@@ -134,7 +128,9 @@ void UInspectionComponent::Zoom(const FInputActionValue& Value)
 	FVector Loc = InspectionPivot->GetRelativeLocation();
 	float NewX = Loc.X + Delta;
 	if (NewX < MinZoom || NewX > MaxZoom)
+	{
 		return;
+	}
 	InspectionPivot->AddLocalOffset(FVector(Delta,0,0));
 }
 

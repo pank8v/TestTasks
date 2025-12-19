@@ -7,7 +7,6 @@
 #include "CableComponent.h"
 #include "ConnectableCable.h"
 #include "EnergyNode.h"
-#include "./TestTasks/Interactable.h"
 #include "ConnectionCable.generated.h"
 
 UCLASS()
@@ -20,44 +19,40 @@ public:
 	AConnectionCable();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditAnywhere)
-	UCableComponent* CableComponent;
+	TObjectPtr<USceneComponent> RootComp;
 	
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* StartCableMesh;
+	TObjectPtr<UCableComponent> CableComponent;
 	
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* EndCableMesh;
+	TObjectPtr<UStaticMeshComponent> StartCableMesh;
+	
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UStaticMeshComponent> EndCableMesh;
 	
 	UPROPERTY(EditAnywhere, meta=(AllowedClasses="EnergyNode"))
 	TScriptInterface<IEnergyNode> StartEnergyNode;
+	
 	UPROPERTY(EditAnywhere, meta=(AllowedClasses="EnergyNode"))
 	TScriptInterface<IEnergyNode> EndEnergyNode;
-	
-	UPROPERTY(EditAnywhere)
-	USceneComponent* RootComp;
-	
-	bool bStartConnected = false;
-	bool bEndConnected = false;
-	
 
 public:	
 	
 	TScriptInterface<IEnergyNode> GetStartEnergyNode();
 	TScriptInterface<IEnergyNode> GetEndEnergyNode();
 	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-	
 	virtual bool TryConnectNode_Implementation(TScriptInterface<IEnergyNode>& Node, AActor* HitActor) override;
 	virtual void Disconnect_Implementation() override;
 	
 private:
+	
+	bool bStartConnected = false;
+	bool bEndConnected = false;
+	
 	void UpdateConnection();
-	void AttachStartTo(AActor* Actor);
-	void AttachEndTo(AActor* Actor);
+	void AttachStartTo(const AActor* Actor);
+	void AttachEndTo(const AActor* Actor);
 	
 };

@@ -14,15 +14,6 @@ UItemInspectionComponent::UItemInspectionComponent()
 }
 
 
-// Called when the game starts
-void UItemInspectionComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
 
 // Called every frame
 void UItemInspectionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

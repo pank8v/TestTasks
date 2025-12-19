@@ -15,23 +15,9 @@ AItem::AItem()
 
 }
 
-// Called when the game starts or when spawned
-void AItem::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AItem::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 
 void AItem::Interact_Implementation()
 {
 	IInteractable::Interact_Implementation();
-	UE_LOG(LogTemp, Display, TEXT("Interactuin"));
 }
 

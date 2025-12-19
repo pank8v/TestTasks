@@ -16,15 +16,14 @@ public:
 	ASolarPanel();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* StaticMesh;
+	TObjectPtr<UStaticMeshComponent> StaticMesh;
 	
 	UPROPERTY(EditAnywhere)
-	ADirectionalLight* LightSource;
+	TObjectPtr<ADirectionalLight> LightSource;
 	
+	UPROPERTY(VisibleAnywhere)
 	float Efficiency;
 	
 public:	

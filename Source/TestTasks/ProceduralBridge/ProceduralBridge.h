@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/SplineComponent.h"
 #include "ProceduralBridge.generated.h"
 
 UCLASS()
@@ -17,35 +16,23 @@ public:
 	AProceduralBridge();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 	virtual void OnConstruction(const FTransform& Transform) override;
 	
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<USceneComponent> RootComp;
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UStaticMeshComponent> StartMesh;
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UStaticMeshComponent> EndMesh;
 	
 	UPROPERTY(EditAnywhere)
-	USceneComponent* RootComp;
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* StartMesh;
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* EndMesh;
-	
-	UPROPERTY(EditAnywhere)
-	UStaticMesh* MiddleMesh;
+	TObjectPtr<UStaticMesh> MiddleMesh;
 	
 	UPROPERTY(EditAnywhere)
 	float SegmentLength = 100.0f;
 	
 	UPROPERTY(EditAnywhere)
 	float BridgeLength = 300.0f;
+	UPROPERTY()
 	TArray<UStaticMeshComponent*> MiddleMeshes;
-
-	
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-	
-
-	
-	
-	
 };

@@ -10,18 +10,11 @@
 AProceduralBridge::AProceduralBridge()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-	RootComponent = RootComp;
+	SetRootComponent(RootComp);
 	StartMesh = CreateDefaultSubobject<UStaticMeshComponent>("StartMesh");
 	EndMesh = CreateDefaultSubobject<UStaticMeshComponent>("EndMesh");
-	
-}
-
-// Called when the game starts or when spawned
-void AProceduralBridge::BeginPlay()
-{
-	Super::BeginPlay();
 	
 }
 
@@ -37,7 +30,7 @@ void AProceduralBridge::OnConstruction(const FTransform& Transform)
 	float Distance = (End-Start).Size();
 	int32 NumSegments = FMath::FloorToInt(Distance / SegmentLength);
 	float RealSegmentLength = Distance / NumSegments;
-	for (auto Comp:MiddleMeshes)
+	for (auto& Comp:MiddleMeshes)
 	{
 		Comp->DestroyComponent();
 	}
@@ -45,7 +38,7 @@ void AProceduralBridge::OnConstruction(const FTransform& Transform)
 	
 	for (int i = 1; i <= NumSegments; i++)
 	{
-		UStaticMeshComponent* NewMesh = NewObject<UStaticMeshComponent>(this);
+		UStaticMeshComponent* NewMesh = Cast<UStaticMeshComponent>(AddComponentByClass(UStaticMeshComponent::StaticClass(),true, FTransform::Identity, false));
 		NewMesh->RegisterComponent();
 		NewMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 		NewMesh->SetStaticMesh(MiddleMesh);
@@ -58,10 +51,4 @@ void AProceduralBridge::OnConstruction(const FTransform& Transform)
 	
 }
 
-// Called every frame
-void AProceduralBridge::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
 

@@ -8,31 +8,15 @@
 AConnectionCable::AConnectionCable()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	RootComp = CreateDefaultSubobject<USceneComponent>("RootComponent");
-	RootComponent = RootComp;
+	SetRootComponent(RootComp);
     StartCableMesh = CreateDefaultSubobject<UStaticMeshComponent>("StartCableMesh");
 	StartCableMesh->SetupAttachment(RootComponent);
 	CableComponent = CreateDefaultSubobject<UCableComponent>("CableComponent");
 	CableComponent->SetupAttachment(StartCableMesh);
 	EndCableMesh = CreateDefaultSubobject<UStaticMeshComponent>("EndCableMesh");
 	EndCableMesh->SetupAttachment(RootComponent);
-}
-
-// Called when the game starts or when spawned
-void AConnectionCable::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-
-
-// Called every frame
-void AConnectionCable::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 bool AConnectionCable::TryConnectNode_Implementation(TScriptInterface<IEnergyNode>& Node, AActor* HitActor)
@@ -53,7 +37,7 @@ bool AConnectionCable::TryConnectNode_Implementation(TScriptInterface<IEnergyNod
 }
 
 
-void AConnectionCable::AttachStartTo(AActor* Actor)
+void AConnectionCable::AttachStartTo(const AActor* Actor)
 {
 	if (StartCableMesh == nullptr)
 	{
@@ -62,7 +46,7 @@ void AConnectionCable::AttachStartTo(AActor* Actor)
 	AttachToComponent(Actor->GetRootComponent(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("CableSocket"));
 }
 
-void AConnectionCable::AttachEndTo(AActor* Actor)
+void AConnectionCable::AttachEndTo(const AActor* Actor)
 {
 	if (EndCableMesh == nullptr)
 	{
@@ -103,8 +87,6 @@ void AConnectionCable::UpdateConnection()
 		StartEnergyNode->ConnectNode_Implementation(nullptr);
 		EndEnergyNode->ConnectNode_Implementation(nullptr);
 	}
-	
-	
 }
 
 TScriptInterface<IEnergyNode> AConnectionCable::GetStartEnergyNode()

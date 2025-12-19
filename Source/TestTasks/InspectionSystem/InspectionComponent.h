@@ -18,7 +18,6 @@ class TESTTASKS_API UInspectionComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UInspectionComponent();
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	// ============================================================================
 	// Public Methods
 	// ============================================================================
@@ -55,10 +54,10 @@ protected:
 	// Inspection Pivot & Camera
 	// ============================================================================
 	UPROPERTY(EditAnywhere)
-	USceneComponent* InspectionPivot;
+	TObjectPtr<USceneComponent> InspectionPivot;
 	
-	
-	UCameraComponent* CameraComponent;
+	UPROPERTY()
+	TObjectPtr<UCameraComponent> CameraComponent;
 	
 
 	// ============================================================================
@@ -84,6 +83,7 @@ protected:
 	
 	
 private:
+	UPROPERTY()
 	AActor* CurrentInspectedActor;
 	
 	bool bIsHolding;
@@ -94,10 +94,19 @@ private:
 	// ============================================================================
 	// Input Callbacks
 	// ============================================================================
+	UFUNCTION()
 	void Rotate(const FInputActionValue& Value);
+	
+	UFUNCTION()
 	void Zoom(const FInputActionValue& Value);
+	
+	UFUNCTION()
 	void HoldInspection(const FInputActionValue& Value);
+	
+	UFUNCTION()
 	void StopHoldingInspection(const FInputActionValue& Value);
+	
+	UFUNCTION()
 	void StopInspection();
 
 };

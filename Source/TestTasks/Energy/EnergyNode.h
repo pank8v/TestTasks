@@ -24,8 +24,10 @@ class TESTTASKS_API IEnergyNode
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void ConnectNode(const TScriptInterface<IEnergyNode>& EnergyNode);
+	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void DisconnectNode(const TScriptInterface<IEnergyNode>& EnergyNode);
+	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void UpdateConnection(bool DeviceState);
 };

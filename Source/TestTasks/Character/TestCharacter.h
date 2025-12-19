@@ -26,22 +26,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UCameraComponent> CameraComponent;
 	
 	UPROPERTY(EditAnywhere)
-	UCameraComponent* CameraComponent;
+	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 	
 	UPROPERTY(EditAnywhere)
-	UInputMappingContext* DefaultMappingContext;
-	
-	UPROPERTY(EditAnywhere)
-	UInputMappingContext* InspectMappingContext;
+	TObjectPtr<UInputMappingContext> InspectMappingContext;
 	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> MoveAction;
@@ -55,13 +47,26 @@ public:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UInputAction> InteractAction;
 	
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
-	void Interact();
-	
+	UPROPERTY(VisibleAnywhere)
 	TScriptInterface<IConnectableCable> Cable;
 		
 	UPROPERTY(EditAnywhere)
-	UInspectionComponent* InspectionComponent;
+	TObjectPtr<UInspectionComponent> InspectionComponent;
+	
+	UFUNCTION()
+	void Move(const FInputActionValue& Value);
+	
+	UFUNCTION()
+	void Look(const FInputActionValue& Value);
+	
+	UFUNCTION()
+	void Interact();
+	
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 };

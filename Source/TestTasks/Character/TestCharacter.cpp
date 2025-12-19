@@ -19,7 +19,6 @@ ATestCharacter::ATestCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera Component");
 	CameraComponent->SetupAttachment(RootComponent);
-	
 	InspectionComponent = CreateDefaultSubobject<UInspectionComponent>("InspectionComponent");
 }
 
@@ -92,11 +91,8 @@ void ATestCharacter::Interact()
 		
 		if (UItemInspectionComponent* InspectedItem = HitActor -> FindComponentByClass<UItemInspectionComponent>())
 		{
-			if (InspectedItem)
-			{
 				InspectionComponent->StartInspection(HitActor);
 				return;
-			}
 		}
 		
 		if (HitActor->GetClass()->ImplementsInterface(UConnectableCable::StaticClass()))

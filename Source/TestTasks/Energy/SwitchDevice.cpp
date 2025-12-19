@@ -9,23 +9,9 @@
 ASwitchDevice::ASwitchDevice()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
-	RootComponent = StaticMeshComponent;
-}
-
-// Called when the game starts or when spawned
-void ASwitchDevice::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ASwitchDevice::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+	SetRootComponent(StaticMeshComponent);
 }
 
 void ASwitchDevice::ConnectNode_Implementation(const TScriptInterface<IEnergyNode>& EnergyNode)

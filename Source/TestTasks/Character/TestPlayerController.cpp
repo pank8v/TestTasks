@@ -46,6 +46,7 @@ void ATestPlayerController::EnableInspectionMode()
 {
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
+		bShowMouseCursor = true;
 		Subsystem->RemoveMappingContext(DefaultMappingContext);
 		Subsystem->AddMappingContext(InspectMappingContext, 0);
 	}
@@ -55,6 +56,7 @@ void ATestPlayerController::DisableInspectionMode()
 {
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
+		bShowMouseCursor = false;
 		Subsystem->RemoveMappingContext(InspectMappingContext);
 		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
